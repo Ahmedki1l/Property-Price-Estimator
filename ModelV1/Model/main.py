@@ -29,11 +29,11 @@ def main():
     # Train and save the model, also retrieve training history
     neural_network_path = 'Models/NeuralNetwork/final_model14.keras'
 
-    input_shape = X_train_sfs.shape[1]  # Number of features after feature selection
-    model, history = train_and_save_model(X_train_sfs, y_train, input_shape, neural_network_path)
+    # input_shape = X_train_sfs.shape[1]  # Number of features after feature selection
+    # model, history = train_and_save_model(X_train_sfs, y_train, input_shape, neural_network_path)
 
     # Optionally, plot the training history to check for overfitting/underfitting
-    plot_training_history(history)
+    # plot_training_history(history)
 
     # Load the model and evaluate its performance // better is the model number 14 and feature selection number 16
     model = load_model(neural_network_path)
@@ -44,8 +44,8 @@ def main():
     # XGBoost model best model is 22 with feature selection number 16
     xgboost_path = "./Models/XGBoost/xgboost_model22.pkl"
 
-    regr, y_train_pred = train_xgboost_model(X_train_sfs, y_train, xgboost_path)
-    plot_model_performance(y_train, y_train_pred)
+    # regr, y_train_pred = train_xgboost_model(X_train_sfs, y_train, xgboost_path)
+    # plot_model_performance(y_train, y_train_pred)
 
     loaded_xgboost_model = xgboost_load_model(xgboost_path)
 

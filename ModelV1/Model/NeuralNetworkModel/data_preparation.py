@@ -22,7 +22,7 @@ def load_and_preprocess_data(filepath):
     #     print("Dropped rows where 'SalePrice' is NaN.")
     #
     # train['LogPrice'] = np.log(train['SalePrice'])
-    print("Now the histplot and proplot look much better!")
+    # print("Now the histplot and proplot look much better!")
     # dist_price = sns.distplot(train['LogPrice'], fit=norm)
     # fig = plt.figure()
 

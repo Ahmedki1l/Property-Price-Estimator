@@ -16,18 +16,15 @@ def load_and_preprocess_data(filepath):
     # Drop ID column in training dataset
     train = train.drop('Id', axis=1)
 
-    # # Handling missing values for target variable 'SalePrice'
-    # if train['SalePrice'].isna().any():
-    #     train.dropna(subset=['SalePrice'], inplace=True)  # Dropping rows where 'SalePrice' is NaN
-    #     print("Dropped rows where 'SalePrice' is NaN.")
-    #
     # train['LogPrice'] = np.log(train['SalePrice'])
     # print("Now the histplot and proplot look much better!")
     # dist_price = sns.distplot(train['LogPrice'], fit=norm)
     # fig = plt.figure()
 
     # Drop outliers
-    # train = train.drop(train[(train['1stFlrSF'] > 4000) & (train['SalePrice'] < 12.5)].index)
+    train = train.drop(train[(train['1stFlrSF']>4000) & (train['SalePrice']<300000)].index)
+    train = train.drop(train[(train['GrLivArea'] > 4500) & (train['SalePrice'] < 300000)].index)
+    train = train.drop(train[(train['OverallQual'] == 4) & (train['SalePrice'] > 250000)].index)
 
     # Handle categorical features with missing values
     categorical_fillna = [
@@ -54,6 +51,8 @@ def load_and_preprocess_data(filepath):
     ]
     for feature in numerical_features:
         train[feature] = train[feature].fillna(train[feature].median())
+
+    train = train.dropna()
 
     # Feature Engineering
     train['Total_Living_Area'] = train['1stFlrSF'] + train['2ndFlrSF']

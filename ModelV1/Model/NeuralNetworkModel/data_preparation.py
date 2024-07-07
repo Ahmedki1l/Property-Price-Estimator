@@ -1,3 +1,5 @@
+import pickle
+
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
@@ -6,6 +8,17 @@ from sklearn.preprocessing import OneHotEncoder
 import seaborn as sns
 import matplotlib.pyplot as plt
 from scipy.stats import norm, skew
+
+# Assuming your dataset is in a pandas DataFrame called 'data_all_cor_se17'
+def correlation(dataset, threshold):
+    col_corr = set()  # Set of all the names of correlated columns
+    corr_matrix = dataset.corr()
+    for i in range(len(corr_matrix.columns)):
+        for j in range(i):
+            if abs(corr_matrix.iloc[i, j]) > threshold: # we are interested in absolute coeff value
+                colname = corr_matrix.columns[i]  # getting the name of column
+                col_corr.add(colname)
+    return col_corr
 
 
 def load_and_preprocess_data(filepath):
@@ -59,6 +72,16 @@ def load_and_preprocess_data(filepath):
     train['Total_Bathrooms'] = train['BsmtFullBath'] + train['BsmtHalfBath'] + train['FullBath'] + train['HalfBath']
     train['House_Age'] = train['YrSold'] - train['YearBuilt']
     train['Garage_Age'] = train['YrSold'] - train['GarageYrBlt']
+    #
+    # train = train.drop(['1stFlrSF',
+    #                     '2ndFlrSF',
+    #                     'BsmtFullBath',
+    #                     'BsmtHalfBath',
+    #                     'FullBath',
+    #                     'HalfBath',
+    #                     'YrSold',
+    #                     'YearBuilt',
+    #                     'GarageYrBlt'], axis=1)
 
     # data preprocessing
     # Select only the numeric features
@@ -104,9 +127,13 @@ def load_and_preprocess_data(filepath):
 
     numerical_vars_to_normalize = [col for col in numerical_vars if col != 'SalePrice']
 
-    scaler = MinMaxScaler()
-    # Fit the scaler on the numerical variables to normalize and transform the data
-    train[numerical_vars_to_normalize] = scaler.fit_transform(train[numerical_vars_to_normalize])
+    # scaler = MinMaxScaler()
+    # # Fit the scaler on the numerical variables to normalize and transform the data
+    # train[numerical_vars_to_normalize] = scaler.fit_transform(train[numerical_vars_to_normalize])
+    #
+    # # Save the scaler to a file for later use
+    # with open('scaler.pkl', 'wb') as f:
+    #     pickle.dump(scaler, f)
 
     # encoding categorical features
     encoder = OneHotEncoder()
